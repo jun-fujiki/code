@@ -122,26 +122,13 @@ void draw()
 
   for (int i = 0; i < SIZEX; i++)
   {
-    float aa = ( cells[(i+3+SIZEX)%SIZEX][step%SIZEY].state );
-    float a0 = ( cells[(i+2+SIZEX)%SIZEX][step%SIZEY].state );
-    float a1 = ( cells[(i+1+SIZEX)%SIZEX][step%SIZEY].state );
-    float a2 = ( cells[(i+0+SIZEX)%SIZEX][step%SIZEY].state );
-    float a3 = ( cells[(i-1+SIZEX)%SIZEX][step%SIZEY].state );
-    float a4 = ( cells[(i-2+SIZEX)%SIZEX][step%SIZEY].state );
-    float a5 = ( cells[(i-3+SIZEX)%SIZEX][step%SIZEY].state );
+    int r = cells[i][step%SIZEY].currentRule;
+    float delta = gain * ( error / SIZEX );
 
-    {
-      int r = cells[i][step%SIZEY].currentRule;
-
-      float localSum = aa + a0 + a1 + a2 + a3 + a4 + a5;
-      float locality = map(localSum, 0, 7, 0.0, 1.0);
-      float delta = gain * ( error / SIZEX );
-
-      float v = cells[i][(step+1)%SIZEY].rule[r];
-      v += delta;
-      v = constrain(v, 0.0, 1.0);
-      cells[i][(step+1)%SIZEY].rule[r] = v;
-    }
+    float v = cells[i][(step+1)%SIZEY].rule[r];
+    v += delta;
+    v = constrain(v, 0.0, 1.0);
+    cells[i][(step+1)%SIZEY].rule[r] = v;
   }
 
   // ステップ更新
